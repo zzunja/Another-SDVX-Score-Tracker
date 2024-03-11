@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import  getData  from '../../scores/page'
 
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json()
