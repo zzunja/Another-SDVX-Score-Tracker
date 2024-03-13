@@ -1,14 +1,34 @@
 "use client"
  
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef, SortingFn } from "@tanstack/react-table"
+import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { Button } from "@/components/ui/button"
  
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+
+const gradeSorting = (rowA: any, rowB: any, columnId: any): number => {
+  const firstValue = rowA.original.grade
+  const secondValue = rowB.original.grade
+  const dict = {
+    "S": 10,
+    "AAA+": 9,
+    "AAA": 8,
+    "AA+": 7,
+    "AA": 6,
+    "A+": 5,
+    "A": 4,
+    "B": 3,
+    "C": 2,
+    "D": 1
+  }
+
+  return dict[firstValue] > dict[secondValue] ? 1 : dict[firstValue] < dict[secondValue] ? -1 : 0
+}
+
 export type Scores = {
   songName: string //楽曲名
   levelType: string //難易度
   level: number //楽曲レベル
-  clearType: "PERFECT" | "ULTIMATE CHAIN" | "EXCESSIVE COMPLETE" | "COMPLETE" | "PLAYED" //クリアランク
+  clearType: "PERFECT" | "ULTIMATE CHAIN" | "EXCESSIVE CLEAR" | "EFFECTIVE CLEAR" | "PLAYED" //クリアランク
   grade: "S" | "AAA+" | "AAA" | "AA+" | "AA" | "A+" | "A" | "B" | "C" | "D"  //スコアグレード
   score: number //ハイスコア
   EXscore: number //EXスコア
@@ -17,11 +37,11 @@ export type Scores = {
   ultimateChain: number
   perfect: number
 }
- 
+
 export const columns: ColumnDef<Scores>[] = [
   {
     accessorKey: "songName",
-    header: "Song Name",
+    header: 'Song Name'
   },
   {
     accessorKey: "levelType",
@@ -30,46 +50,63 @@ export const columns: ColumnDef<Scores>[] = [
   {
     accessorKey: "level",
     header: "Level Number",
+    cell: ({row}) => {
+      const amount = row.getValue("level")
+      return <div className="text-center">{amount}</div>
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    }
   },
   {
     accessorKey: "clearType",
-    header: "Clear",
+    header: () => <div className="text-center">Clear Type</div>,
+    cell: ({row}) => {
+      const amount = row.getValue("clearType")
+      return <div className="text-center">{amount}</div>
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    }
   },
   {
     accessorKey: "grade",
-    header: "Grade",
+    sortingFn: (
+      gradeSorting
+    ),
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting()}
+          className="text-center"
+        >
+          Grade
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    }
   },
   {
     accessorKey: "score",
-    header: "Score",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="text-center"
+        >
+          Score
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
   },
   {
     accessorKey: "EXscore",
     header: "EX Score",
   },
 ]
-
-
-/*
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
- 
-export const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "email",
-    header: "Email",
-  },
-  {
-    accessorKey: "amount",
-    header: "Amount",
-  },
-]
-*/

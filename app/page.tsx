@@ -4,12 +4,11 @@ import React, { useState } from "react"
 import { Scores, columns } from "./scores/columns"
 import Papa from 'papaparse'
 import { DataTable } from "./scores/data-tables"
-import { Metadata } from 'next'
 
 async function getData(responseData): Promise<Scores[]> {
   let data
   var dataArray = []
-  for (let i = 0; i < responseData.length; i++) {
+  for (let i = 1; i < responseData.length; i++) {
     data = {
       songName: responseData[i].songName,
       levelType: responseData[i].levelType,
@@ -40,6 +39,7 @@ const Home: React.FC = () => {
     
     Papa.parse(file, {
       header: false,
+      skipEmptyLines: 'greedy',
       complete: async function(results) {
         try {
           const response = await fetch("/api/sortdata", {
@@ -58,7 +58,6 @@ const Home: React.FC = () => {
        }
       });
     }
-
   return (
     <main>
       <title>RALSIS</title>
