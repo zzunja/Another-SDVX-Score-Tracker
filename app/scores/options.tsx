@@ -60,13 +60,13 @@ export const clearTypeOptions = [
       icon: CircleIcon,
     },
     {
-      value: "EXCESSIVE CLEAR",
+      value: "EXCESSIVE COMPLETE",
       label: "Excessive Clear",
       icon: CircleIcon,
     },
     {
-      value: "EFFECTIVE CLEAR",
-      label: "Effective Clear",
+      value: "COMPLETE",
+      label: "Clear",
       icon: CircleIcon,
     },
     {
