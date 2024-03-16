@@ -1,7 +1,7 @@
 "use client"
  
 import { ColumnDef, SortingFn } from "@tanstack/react-table"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
  
 
@@ -37,6 +37,9 @@ export type Scores = {
   ultimateChain: number
   perfect: number
 }
+type amount ={
+
+}
 
 export const columns: ColumnDef<Scores>[] = [
   {
@@ -51,7 +54,7 @@ export const columns: ColumnDef<Scores>[] = [
     accessorKey: "level",
     header: "Level Number",
     cell: ({row}) => {
-      const amount = row.getValue("level")
+      const amount = parseInt(row.getValue("level"))
       return <div className="text-center">{amount}</div>
     },
     filterFn: (row, id, value) => {
@@ -62,7 +65,7 @@ export const columns: ColumnDef<Scores>[] = [
     accessorKey: "clearType",
     header: () => <div className="text-center">Clear Type</div>,
     cell: ({row}) => {
-      const amount = row.getValue("clearType")
+      const amount = String(row.getValue("clearType"))
       return <div className="text-center">{amount}</div>
     },
     filterFn: (row, id, value) => {

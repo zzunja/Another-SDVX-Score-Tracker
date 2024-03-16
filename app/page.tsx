@@ -6,7 +6,6 @@ import Papa from 'papaparse'
 import { DataTable } from "./scores/data-tables"
 import { ModeToggle } from "@/components/ui/darkModeToggle"
 import { Input } from "@/components/ui/input"
-import { ButtonWithIcon } from "@/components/ui/uploadButton"
 
 async function getData(responseData): Promise<Scores[]> {
   let data
@@ -65,17 +64,15 @@ const Home: React.FC = () => {
     <main>
       <title>RALSIS</title>
       <link rel="icon" href="/favicon.ico" sizes="any"/>
-
-      <ButtonWithIcon/>
-      {/* <form onSubmit={(e) => handleFileSubmit(e)}>
+      <form onSubmit={(e) => handleFileSubmit(e)}>
         <input 
           type="file" 
           name="file" 
           accept='.csv' 
           onChange={(e) => setFile(e.target.files?.[0])}
-          hidden/>
+          />
         <input type="submit" value="Upload"/>
-      </form> */}
+      </form>
       <ModeToggle/>
       <div className="container mx-auto py-10">
         <DataTable columns={columns} data={data} />
