@@ -29,6 +29,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Checkbox } from "@/components/ui/checkbox"
+
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -46,7 +49,10 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
-  const [columnVisibility, setColumnVisibility] =
+  const [columnVisibility, setColumnVisibility] = React.useState({
+    top50: false,
+    id: false
+  })
   React.useState<VisibilityState>({})
   
 
@@ -67,10 +73,10 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
-  
+
   return (
     <div>
-      <div className="flex flex-1 items-center space-x-2">
+      <div className="flex items-center py-4 space-x-2">
         <Input
           placeholder="Filter by Song Name..."
           value={(table.getColumn("songName")?.getFilterValue() as string) ?? ""}
@@ -94,10 +100,25 @@ export function DataTable<TData, TValue>({
           title="Level Number"
           options={levelOptions}
           />
+        <div className="flex-grow" /> 
+        <div className="space-x-2 ">
+          <Checkbox
+            id="volforce"
+            onCheckedChange={(event) => {
+              if (event === true) {
+                table.getColumn("top50")?.setFilterValue(event)
+              } else {
+                table.getColumn("top50")?.setFilterValue(null)
+                table.getColumn("id")?.setFilterValue(null) //why does this fix it. theres def a better way to do it but whatever
+              }
+            }}
+          />
+          <label htmlFor="volforce">
+            Volforce
+          </label>
+        </div>
       </div>
-      
       <div className="rounded-md border">
-
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => ( <TableRow key={headerGroup.id}>

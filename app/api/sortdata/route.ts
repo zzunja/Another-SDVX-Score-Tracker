@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+const gradeBonus = {"S":1.05, "AAA+":1.02, "AAA":1, "AA+":.97, "AA":.94, "A+":.91, "A":.88, "B":.85, "C":.82, "D":.8, "F":0}
+const clearMedal = {"PERFECT":1.1, "ULTIMATE CHAIN":1.05, "EXCESSIVE COMPLETE":1.02, "COMPLETE":1, "PLAYED":.5}
+
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json()
-  const response = body.results.data.map((x) => {
+  const data = body.results.data
+  for (let i = 1; i < data.length; i++){
+    var VF = ((data[i][2] * (data[i][5]/10000000) * gradeBonus[data[i][4]] * clearMedal[data[i][3]] * 20)*.001).toFixed(3)
+    data[i].push(VF)
+    data[i].push(false) //why not since we are loop though them. this is used for detecting if in top 50
+    data[i].push(i) // id. for sorting. there is prob a way to do this without this but idc
+  }
+
+  const response = data.map((x) => {
     return{
       songName: x[0],
       levelType: x[1],
@@ -14,9 +25,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
       totalPlays: x[7],
       totalPass: x[8],
       ultimateChain: x[9],
-      perfect: x[10]
+      perfect: x[10],
+      volforce: x[11],
+      top50: x[12],
+      id: x[13]
     }
   })
 
+
+  response.sort((a, b) => b.volforce - a.volforce)
+  for(let i = 1; i < 50; i++){
+    response[i].top50 = true
+  }
+  response.sort((a, b) => a.id - b.id)
   return NextResponse.json({response:response})
 }

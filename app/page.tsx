@@ -23,6 +23,9 @@ async function getData(responseData): Promise<Scores[]> {
       totalPass: responseData[i].totalPass,
       ultimateChain: responseData[i].ultimateChain,
       perfect: responseData[i].perfect,
+      volforce: responseData[i].volforce,
+      top50: responseData[i].top50,
+      id: responseData[i].id
     }
     dataArray.push(data)
   }
@@ -34,6 +37,7 @@ async function getData(responseData): Promise<Scores[]> {
 const Home: React.FC = () => {
   const [file, setFile] = useState<File>()
   const [data, setData] = useState([])
+  const [showDataTable, setShowDataTable] = useState(false)
   let tableData = []
   
   const handleFileSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
@@ -59,22 +63,30 @@ const Home: React.FC = () => {
         }
        }
       });
+      setShowDataTable(true)
     }
   return (
     <main>
       <title>RALSIS</title>
       <link rel="icon" href="/favicon.ico" sizes="any"/>
-      <form onSubmit={(e) => handleFileSubmit(e)}>
-        <input 
-          type="file" 
-          name="file" 
-          accept='.csv' 
-          onChange={(e) => setFile(e.target.files?.[0])}
-          />
-        <input type="submit" value="Upload"/>
-      </form>
-      <ModeToggle/>
-      <div className="container mx-auto py-10">
+      <h1 className="graphicDesignIsMyPassion">SCORE SORTING SDVX :)))</h1>
+      <div className="form">
+        <div className = "uploadForm">
+          <form onSubmit={(e) => handleFileSubmit(e)}>
+            <input 
+              type="file" 
+              name="file" 
+              accept='.csv' 
+              onChange={(e) => setFile(e.target.files?.[0])}
+              />
+            <input type="submit" value="Upload"/>
+          </form>
+        </div>
+        <div className="topcorner">
+          <ModeToggle/>
+        </div>
+      </div>
+      <div className={`container mx-auto py-10 ${showDataTable ? '' : 'hidden'}`} >
         <DataTable columns={columns} data={data} />
       </div>
     </main>

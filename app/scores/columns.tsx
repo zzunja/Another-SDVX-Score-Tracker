@@ -36,10 +36,11 @@ export type Scores = {
   totalPass: number //クリア回数
   ultimateChain: number
   perfect: number
+  volforce: number
+  top50: boolean
+  id: number
 }
-type amount ={
 
-}
 
 export const columns: ColumnDef<Scores>[] = [
   {
@@ -91,6 +92,10 @@ export const columns: ColumnDef<Scores>[] = [
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
+    },
+    cell: ({row}) => {
+      const amount = String(row.getValue("grade"))
+      return <div className="text-center">{amount}</div>
     }
   },
   {
@@ -111,5 +116,30 @@ export const columns: ColumnDef<Scores>[] = [
   {
     accessorKey: "EXscore",
     header: "EX Score",
+  },
+  {
+    accessorKey: "volforce",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting()}
+          className="text-center"
+        >
+          Volforce
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({row}) => {
+      const amount = String(row.getValue("volforce"))
+      return <div className="text-center">{amount}</div>
+    }
+  },
+  {
+    accessorKey: "top50",
+  },
+  {
+    accessorKey: "id",
   },
 ]
