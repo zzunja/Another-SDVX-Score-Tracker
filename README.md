@@ -9,4 +9,6 @@ things left to do
 - add a state manager thing so that when you reload you dont have to re-import. everything would be saved locally ✔️
 - add a way to see updated scores/see how much volforce you go up ✔️
 - make the upload button not as ugly.
+- make the stuff actually center correctly
+- maybe add more filters?
 - update website header and prob favicon (one day)
