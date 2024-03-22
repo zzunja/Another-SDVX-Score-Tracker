@@ -23,6 +23,18 @@ const gradeSorting = (rowA: any, rowB: any, columnId: any): number => {
 
   return dict[firstValue] > dict[secondValue] ? 1 : dict[firstValue] < dict[secondValue] ? -1 : 0
 }
+const clearSorting = (rowA: any, rowB: any, columnId: any): number => {
+  const firstValue = rowA.original.clearType
+  const secondValue = rowB.original.clearType
+  const dict = {
+    "PERFECT": 5,
+    "ULTIMATE CHAIN": 4,
+    "EXCESSIVE COMPLETE": 3,
+    "COMPLETE": 2,
+    "PLAYED": 1,
+  }
+  return dict[firstValue] > dict[secondValue] ? 1 : dict[firstValue] < dict[secondValue] ? -1 : 0
+}
 
 export type Scores = {
   songName: string //楽曲名
@@ -64,14 +76,25 @@ export const columns: ColumnDef<Scores>[] = [
   },
   {
     accessorKey: "clearType",
-    header: () => <div className="text-center">Clear Type</div>,
+    sortingFn: (
+      clearSorting
+    ),
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting()}
+          className="text-center"
+        >
+          Clear Type
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       const amount = String(row.getValue("clearType"))
       return <div className="text-center">{amount}</div>
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id))
-    }
   },
   {
     accessorKey: "grade",

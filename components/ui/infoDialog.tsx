@@ -47,7 +47,7 @@ export function InfoDialog(){
                 <br/><br/>
                 <p className="center bold">I COMPLETELY MESSED UP AND NEED TO RESET MY DATA!!!</p>
                 Just click the Red Reset Button button to reset your local storage!<br/><br/>
-                <Button variant="destructive" size="sm"><button onClick={() => localStorage.clear()}>Red Reset Button</button></Button>
+                <Button variant="destructive" size="sm" onClick={() => localStorage.clear()}>Red Reset Button</Button>
                 <br/><br/>
                 <p className="center bold">Why does the website look horrible</p>
                 …that wraps up the FAQ
