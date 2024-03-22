@@ -89,6 +89,7 @@ form
   top:10px;
  }
  .graphicDesignIsMyPassion{
+  display: none;
   font-size: 70px;
   font-weight: 600;
   color: orangered;
@@ -96,6 +97,7 @@ form
   -webkit-background-clip: text;
   text-align: center
  }
+
 
 @layer base {
   * {

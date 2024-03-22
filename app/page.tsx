@@ -5,7 +5,8 @@ import { Scores, columns } from "./scores/columns"
 import Papa from 'papaparse'
 import { DataTable } from "./scores/data-tables"
 import { ModeToggle } from "@/components/ui/darkModeToggle"
-import { Input } from "@/components/ui/input"
+import { InfoDialog } from "@/components/ui/infoDialog"
+
 
 async function getData(responseData): Promise<Scores[]> {
   let data
@@ -38,6 +39,7 @@ const Home: React.FC = () => {
   const [file, setFile] = useState<File>()
   const [data, setData] = useState([])
   const [showDataTable, setShowDataTable] = useState(false)
+  const [totalVF, setTotalVF] = useState()
   let tableData = []
   
   const handleFileSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
@@ -56,8 +58,11 @@ const Home: React.FC = () => {
             body: JSON.stringify({results}),
         })
           const responseData = await response.json()
+          document.getElementById("volforce").innerHTML = responseData.response[0].volforce //maybe just use a state instead of this??
+          setTotalVF(responseData.response[0].volforce)
           tableData = await getData(responseData.response)
           setData(tableData)
+          
         } catch (e: any) {
           console.error(e)
         }
@@ -70,6 +75,8 @@ const Home: React.FC = () => {
       <title>RALSIS</title>
       <link rel="icon" href="/favicon.ico" sizes="any"/>
       <h1 className="graphicDesignIsMyPassion">SCORE SORTING SDVX :)))</h1>
+      <InfoDialog/>
+      <p id="volforce"></p>
       <div className="form">
         <div className = "uploadForm">
           <form onSubmit={(e) => handleFileSubmit(e)}>
@@ -87,7 +94,7 @@ const Home: React.FC = () => {
         </div>
       </div>
       <div className={`container mx-auto py-10 ${showDataTable ? '' : 'hidden'}`} >
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={data} volforce={totalVF} />
       </div>
     </main>
   )

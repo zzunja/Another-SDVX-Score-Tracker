@@ -6,6 +6,7 @@ const clearMedal = {"PERFECT":1.1, "ULTIMATE CHAIN":1.05, "EXCESSIVE COMPLETE":1
 export async function POST(req: NextRequest, res: NextResponse) {
   const body = await req.json()
   const data = body.results.data
+
   for (let i = 1; i < data.length; i++){
     var VF = ((data[i][2] * (data[i][5]/10000000) * gradeBonus[data[i][4]] * clearMedal[data[i][3]] * 20)*.001).toFixed(3)
     data[i].push(VF)
@@ -32,11 +33,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
   })
 
-
+  //sort by top volforce
   response.sort((a, b) => b.volforce - a.volforce)
+  // get totalVF for top 50 and make everything that is in the top 50 have top50 true
+  let totalVF = 0.0
   for(let i = 1; i < 50; i++){
     response[i].top50 = true
+    totalVF = parseFloat(response[i].volforce) + totalVF
   }
+  response[0].volforce = totalVF.toFixed(3)
+  response[0].id = 0
+  
+
   response.sort((a, b) => a.id - b.id)
   return NextResponse.json({response:response})
 }

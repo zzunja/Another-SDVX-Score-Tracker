@@ -36,6 +36,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  volforce: number
 }
 
 
@@ -44,6 +45,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  volforce,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -55,7 +57,7 @@ export function DataTable<TData, TValue>({
   })
   React.useState<VisibilityState>({})
   
-
+  
   const table = useReactTable({
     data,
     columns,
@@ -73,7 +75,7 @@ export function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   })
-
+  
   return (
     <div>
       <div className="flex items-center py-4 space-x-2">
@@ -102,6 +104,7 @@ export function DataTable<TData, TValue>({
           />
         <div className="flex-grow" /> 
         <div className="space-x-2 ">
+          <p id="volforce"></p>
           <Checkbox
             id="volforce"
             onCheckedChange={(event) => {
