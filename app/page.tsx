@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Scores, columns } from "./scores/columns"
 import Papa from 'papaparse'
 import { DataTable } from "./scores/data-tables"
@@ -41,6 +41,14 @@ const Home: React.FC = () => {
   const [showDataTable, setShowDataTable] = useState(false)
   const [totalVF, setTotalVF] = useState()
   let tableData = []
+
+  useEffect(() => {
+    if (localStorage.getItem('DATA')){
+      setData(JSON.parse(localStorage.getItem('DATA')))
+      setTotalVF(JSON.parse(localStorage.getItem('TOTALVF')))
+      setShowDataTable(JSON.parse(localStorage.getItem('SHOW_DATA_TABLE')))
+    }
+  }, [])
   
   const handleFileSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -58,25 +66,31 @@ const Home: React.FC = () => {
             body: JSON.stringify({results}),
         })
           const responseData = await response.json()
-          document.getElementById("volforce").innerHTML = responseData.response[0].volforce //maybe just use a state instead of this??
-          setTotalVF(responseData.response[0].volforce)
           tableData = await getData(responseData.response)
+          setTotalVF(responseData.response[0].volforce),
           setData(tableData)
-          
+
+          setShowDataTable(true)
         } catch (e: any) {
           console.error(e)
         }
        }
       });
-      setShowDataTable(true)
+  }
+
+  useEffect(() => {
+    if (totalVF && data) {
+      localStorage.setItem('SHOW_DATA_TABLE', JSON.stringify(true));
+      localStorage.setItem('TOTALVF', JSON.stringify(totalVF));
+      localStorage.setItem('DATA', JSON.stringify(data));
     }
+  }, [totalVF, data]);
+
   return (
     <main>
-      <title>RALSIS</title>
+      <title>Another SDVX Score Tracker</title>
       <link rel="icon" href="/favicon.ico" sizes="any"/>
-      <h1 className="graphicDesignIsMyPassion">SCORE SORTING SDVX :)))</h1>
-      <InfoDialog/>
-      <p id="volforce"></p>
+      <h1 className="graphicDesignIsMyPassion">ANOTHER SDVX SCORE TRACKER</h1>
       <div className="form">
         <div className = "uploadForm">
           <form onSubmit={(e) => handleFileSubmit(e)}>
@@ -90,7 +104,8 @@ const Home: React.FC = () => {
           </form>
         </div>
         <div className="topcorner">
-          <ModeToggle/>
+          <div className="items"><InfoDialog/></div>
+          <div className="items"><ModeToggle/></div>
         </div>
       </div>
       <div className={`container mx-auto py-10 ${showDataTable ? '' : 'hidden'}`} >

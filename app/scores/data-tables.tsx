@@ -4,7 +4,6 @@ import * as React from "react"
 import { DataTableFacetedFilter } from "@/components/ui/columntoggle"
 import { gradesOptions, clearTypeOptions, levelOptions } from "./options"
 
-
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -17,6 +16,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  getPaginationRowModel,
 } from "@tanstack/react-table"
 
 import { Input } from "@/components/ui/input"
@@ -30,6 +30,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
+import { DataTablePagination } from "@/components/ui/pagenation"
 
 
 
@@ -57,7 +58,6 @@ export function DataTable<TData, TValue>({
   })
   React.useState<VisibilityState>({})
   
-  
   const table = useReactTable({
     data,
     columns,
@@ -74,6 +74,7 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    getPaginationRowModel: getPaginationRowModel(),
   })
   
   return (
@@ -103,9 +104,9 @@ export function DataTable<TData, TValue>({
           options={levelOptions}
           />
         <div className="flex-grow" /> 
-        <div className="space-x-2 ">
-          <p id="volforce"></p>
-          <Checkbox
+        <p style={{marginRight: '10px'}}>{volforce} VF</p>
+        <div className="space-x-2" style={{ display: 'flex', alignItems: 'center' }}>
+            <Checkbox
             id="volforce"
             onCheckedChange={(event) => {
               if (event === true) {
@@ -115,7 +116,7 @@ export function DataTable<TData, TValue>({
                 table.getColumn("id")?.setFilterValue(null) //why does this fix it. theres def a better way to do it but whatever
               }
             }}
-          />
+            />
           <label htmlFor="volforce">
             Volforce
           </label>
@@ -139,7 +140,6 @@ export function DataTable<TData, TValue>({
                 })}
               </TableRow>
             ))}
-            
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
@@ -164,6 +164,7 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+        <DataTablePagination table={table}/>
       </div>
     </div>
   )

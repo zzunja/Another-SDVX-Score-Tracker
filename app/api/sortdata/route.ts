@@ -8,7 +8,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const data = body.results.data
 
   for (let i = 1; i < data.length; i++){
-    var VF = ((data[i][2] * (data[i][5]/10000000) * gradeBonus[data[i][4]] * clearMedal[data[i][3]] * 20)*.001).toFixed(3)
+    var VF = (Math.trunc((data[i][2] * (data[i][5]/10000000) * gradeBonus[data[i][4]] * clearMedal[data[i][3]] * 20)*.001 * 1000) / 1000)
     data[i].push(VF)
     data[i].push(false) //why not since we are loop though them. this is used for detecting if in top 50
     data[i].push(i) // id. for sorting. there is prob a way to do this without this but idc
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   response.sort((a, b) => b.volforce - a.volforce)
   // get totalVF for top 50 and make everything that is in the top 50 have top50 true
   let totalVF = 0.0
-  for(let i = 1; i < 50; i++){
+  for(let i = 1; i < 51; i++){
     response[i].top50 = true
     totalVF = parseFloat(response[i].volforce) + totalVF
   }
