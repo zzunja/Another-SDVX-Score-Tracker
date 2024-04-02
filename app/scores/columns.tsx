@@ -95,6 +95,9 @@ export const columns: ColumnDef<Scores>[] = [
       const amount = String(row.getValue("clearType"))
       return <div className="text-center">{amount}</div>
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    }
   },
   {
     accessorKey: "grade",
