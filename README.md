@@ -12,3 +12,4 @@ things left to do
 - make the stuff actually center correctly
 - maybe add more filters?
 - update website header and prob favicon (one day)
+- add images per chart?
